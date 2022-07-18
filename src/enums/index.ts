@@ -40,3 +40,4 @@ export { Weather } from './Weather';
 export { ZoneID } from './ZoneID';
 export { PickupType } from './PickupType';
 export { CameraTypes } from './CameraTypes';
+export { PedType } from "./PedType";

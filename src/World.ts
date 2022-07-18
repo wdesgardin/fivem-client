@@ -6,9 +6,10 @@ import {
   CloudHat,
   IntersectOptions,
   MarkerType,
+  PedType,
   PickupType,
   RopeType,
-  Weather,
+  Weather
 } from './enums';
 import { VehicleHash } from './hashes';
 import { Ped, Vehicle } from './models';
@@ -641,6 +642,61 @@ export abstract class World {
     }
 
     return new Prop(handle);
+  }
+
+  /**
+   * Gets the closest [[`Ped`]] to a given position.
+   * @param position Position to get closest ped to
+   * @param radius Max radius to search for ped
+   * @param type The [[`PedType`]] to search for
+   * @param onlyWalkings Only search for walkings ped
+   * @returns Closest ped if found, otherwise null
+   */
+   public static getClosestPed(
+    position: Vector3,
+    radius: number,
+    type = PedType.Anyped,
+    onlyWalkings = false,
+  ): Ped | null {
+    const [found, ped] = GetClosestPed(
+      position.x,
+      position.y,
+      position.z,
+      radius,
+      onlyWalkings,
+      false,
+      false,
+      false,
+      type,
+    );
+    return found ? new Ped(ped) : null;
+  }
+ 
+    /**
+   * Gets the closest [[`Prop`]] to a given position.
+   * @param position The position to get the closest prop to
+   * @param radius Max raidus to search for props
+   * @param model The [[`Model`]] of the prop to search for
+   * @param excludePersistents If set to true, will exclude [[`Props`]] with the persistent (mission entity) flag set
+   * @returns The props if found, otherwise null
+   */
+  public static getClosestProp(
+    position: Vector3,
+    radius: number,
+    model: Model,
+    excludePersistents = false,
+  ): Prop | null {
+    const prop = GetClosestObjectOfType(
+      position.x,
+      position.y,
+      position.z,
+      radius,
+      model.Hash,
+      excludePersistents,
+      false,
+      false,
+    );
+    return prop != 0 ? new Prop(prop) : null;
   }
 
   /**
